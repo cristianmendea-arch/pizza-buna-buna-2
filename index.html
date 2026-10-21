@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#10b981">
+  <title>Lista de Cumpărături</title>
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --checked-bg: #f1f5f9;
+      --strike-text: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 16px 14px 100px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      padding-bottom: 12px;
+      z-index: 10;
+    }
+
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-reset {
+      background: #fee2e2;
+      color: #ef4444;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Progress bar */
+    .progress-container {
+      background: #e2e8f0;
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #059669);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: right;
+      font-weight: 600;
+    }
+
+    /* Add Form */
+    .add-box {
+      display: flex;
+      gap: 8px;
+      margin: 12px 0 16px;
+      background: var(--card-bg);
+      padding: 8px;
+      border-radius: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+    }
+
+    .add-box input, .add-box select {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.95rem;
+    }
+
+    .add-box input {
+      flex: 1;
+      padding: 6px 8px;
+    }
+
+    .add-box select {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-right: 1px solid var(--border);
+      padding-right: 6px;
+      max-width: 110px;
+    }
+
+    .add-box button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Categories & Items */
+    .category-group {
+      margin-bottom: 16px;
+    }
+
+    .category-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin: 0 4px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .items-list {
+      background: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .item-row {
+      display: flex;
+      align-items: center;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s ease;
+    }
+
+    .item-row:last-child {
+      border-bottom: none;
+    }
+
+    .item-row.checked {
+      background-color: var(--checked-bg);
+    }
+
+    /* Custom Checkbox */
+    .checkbox-circle {
+      width: 22px;
+      height: 22px;
+      border: 2px solid #cbd5e1;
+      border-radius: 50%;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .item-row.checked .checkbox-circle {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .checkbox-circle svg {
+      display: none;
+      width: 14px;
+      height: 14px;
+      stroke: white;
+    }
+
+    .item-row.checked .checkbox-circle svg {
+      display: block;
+    }
+
+    .item-label {
+      flex: 1;
+      font-size: 0.95rem;
+      color: var(--text);
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .item-row.checked .item-label {
+      text-decoration: line-through;
+      color: var(--strike-text);
+    }
+
+    .item-delete {
+      background: none;
+      border: none;
+      color: #cbd5e1;
+      padding: 4px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .item-delete:hover {
+      color: #ef4444;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="title-row">
+      <h1>🛒 Cumpărături</h1>
+      <div style="display: flex; gap: 6px;">
+        <button class="btn-reset" onclick="resetChecks()">Debifează tot</button>
+        <button class="btn-reset" style="background: #e2e8f0; color: #475569;" onclick="reloadDefaultList()">Reîncarcă baza</button>
+      </div>
+    </div>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 / 0 cumpărate</div>
+
+    <form class="add-box" onsubmit="addNewItem(event)">
+      <select id="newCat">
+        <option value="🥬 Fructe & Legume">Legume</option>
+        <option value="🥩 Carne & Fresh">Carne</option>
+        <option value="🧀 Lactate & Ouă">Lactate</option>
+        <option value="🍝 Băcănie">Băcănie</option>
+        <option value="🍫 Dulciuri & Cafea">Dulciuri</option>
+        <option value="🧃 Băuturi">Băuturi</option>
+      </select>
+      <input type="text" id="newText" placeholder="+ Adaugă alt produs..." required>
+      <button type="submit">+</button>
+    </form>
+  </header>
+
+  <main id="listContainer"></main>
+
+  <script>
+    const INITIAL_ITEMS = [
+      // Fructe & Legume
+      { id: 1, text: "Ceapă roșie (1 buc.)", cat: "🥬 Fructe & Legume", done: false },
+      { id: 2, text: "Usturoi (1 căpățână)", cat: "🥬 Fructe & Legume", done: false },
+      { id: 3, text: "Spanac proaspăt / baby (150 g)", cat: "🥬 Fructe & Legume", done: false },
+      { id: 4, text: "Lămâi", cat: "🥬 Fructe & Legume", done: false },
+      { id: 5, text: "Avocado", cat: "🥬 Fructe & Legume", done: false },
+      { id: 6, text: "Kiwi gold (3–4 bucăți)", cat: "🥬 Fructe & Legume", done: false },
+      { id: 7, text: "Zmeură caserolă (250 g)", cat: "🥬 Fructe & Legume", done: false },
+      { id: 8, text: "Afine caserolă (250 g)", cat: "🥬 Fructe & Legume", done: false },
+
+      // Carne & Ready-to-Eat
+      { id: 9, text: "Piept de pui (700 g)", cat: "🥩 Carne & Fresh", done: false },
+      { id: 10, text: "Carne tocată vită slabă (350 g)", cat: "🥩 Carne & Fresh", done: false },
+      { id: 11, text: "Șuncă de pui cu față zâmbitoare", cat: "🥩 Carne & Fresh", done: false },
+      { id: 12, text: "Platou sushi", cat: "🥩 Carne & Fresh", done: false },
+
+      // Lactate & Ouă
+      { id: 13, text: "Mozzarella (200 g)", cat: "🧀 Lactate & Ouă", done: false },
+      { id: 14, text: "Cremă de brânză / Cream cheese (200 g)", cat: "🧀 Lactate & Ouă", done: false },
+      { id: 15, text: "Brânză cheddar Milbona", cat: "🧀 Lactate & Ouă", done: false },
+      { id: 16, text: "Iaurt grecesc (80 g)", cat: "🧀 Lactate & Ouă", done: false },
+      { id: 17, text: "Lapte fără lactoză (1 L)", cat: "🧀 Lactate & Ouă", done: false },
+      { id: 18, text: "Carton 6 ouă medii", cat: "🧀 Lactate & Ouă", done: false },
+
+      // Băcănie & Condimente
+      { id: 19, text: "Paste (450 g)", cat: "🍝 Băcănie", done: false },
+      { id: 20, text: "Sos de paste (500 g)", cat: "🍝 Băcănie", done: false },
+      { id: 21, text: "Lipii / Wraps (1 pachet)", cat: "🍝 Băcănie", done: false },
+      { id: 22, text: "Condiment Cajun (cajun powder)", cat: "🍝 Băcănie", done: false },
+      { id: 23, text: "Ulei de măsline", cat: "🍝 Băcănie", done: false },
+
+      // Dulciuri & Cafea
+      { id: 24, text: "Cafea la plic de ibric (pt Miha)", cat: "🍫 Dulciuri & Cafea", done: false },
+      { id: 25, text: "Bomboane Halloween (pt Luana)", cat: "🍫 Dulciuri & Cafea", done: false },
+      { id: 26, text: "O cutie bomboane Merci", cat: "🍫 Dulciuri & Cafea", done: false },
+
+      // Băuturi
+      { id: 27, text: "Suc de fructe (portocale)", cat: "🧃 Băuturi", done: false },
+      { id: 28, text: "4 sucuri mici cu pai", cat: "🧃 Băuturi", done: false }
+    ];
+
+    let items = JSON.parse(localStorage.getItem('shopping_items_v2')) || INITIAL_ITEMS;
+
+    function save() {
+      localStorage.setItem('shopping_items_v2', JSON.stringify(items));
+      render();
+    }
+
+    function toggleItem(id) {
+      const item = items.find(i => i.id === id);
+      if (item) {
+        item.done = !item.done;
+        save();
+      }
+    }
+
+    function deleteItem(e, id) {
+      e.stopPropagation();
+      items = items.filter(i => i.id !== id);
+      save();
+    }
+
+    function resetChecks() {
+      if (confirm("Vrei să debifezi toate produsele?")) {
+        items.forEach(i => i.done = false);
+        save();
+      }
+    }
+
+    function reloadDefaultList() {
+      if (confirm("Vrei să reîncarci lista de bază din fișier? (Va șterge modificările locale)")) {
+        items = JSON.parse(JSON.stringify(INITIAL_ITEMS));
+        save();
+      }
+    }
+
+    function addNewItem(e) {
+      e.preventDefault();
+      const textInput = document.getElementById('newText');
+      const catSelect = document.getElementById('newCat');
+      const text = textInput.value.trim();
+      if (!text) return;
+
+      items.push({
+        id: Date.now(),
+        text: text,
+        cat: catSelect.value,
+        done: false
+      });
+
+      textInput.value = '';
+      save();
+    }
+
+    function render() {
+      const container = document.getElementById('listContainer');
+      container.innerHTML = '';
+
+      // Group by category
+      const categories = [...new Set(items.map(i => i.cat))];
+      let totalCount = items.length;
+      let doneCount = items.filter(i => i.done).length;
+
+      // Update progress
+      const percent = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
+      document.getElementById('progressBar').style.width = percent + '%';
+      document.getElementById('progressText').textContent = `${doneCount} / ${totalCount} cumpărate (${percent}%)`;
+
+      categories.forEach(cat => {
+        const catItems = items.filter(i => i.cat === cat);
+        if (catItems.length === 0) return;
+
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'category-group';
+
+        const catTitle = document.createElement('div');
+        catTitle.className = 'category-title';
+        catTitle.textContent = cat;
+        groupDiv.appendChild(catTitle);
+
+        const listDiv = document.createElement('div');
+        listDiv.className = 'items-list';
+
+        catItems.forEach(item => {
+          const row = document.createElement('div');
+          row.className = `item-row ${item.done ? 'checked' : ''}`;
+          row.onclick = () => toggleItem(item.id);
+
+          row.innerHTML = `
+            <div class="checkbox-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div class="item-label">${item.text}</div>
+            <button class="item-delete" onclick="deleteItem(event, ${item.id})" title="Șterge">×</button>
+          `;
+          listDiv.appendChild(row);
+        });
+
+        groupDiv.appendChild(listDiv);
+        container.appendChild(groupDiv);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
