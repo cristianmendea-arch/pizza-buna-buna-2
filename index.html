@@ -255,9 +255,11 @@
     <form class="add-box" onsubmit="addNewItem(event)">
       <select id="newCat">
         <option value="🥬 Fructe & Legume">Legume</option>
+        <option value="🥖 Pâine & Panificație">Pâine</option>
         <option value="🥩 Carne & Fresh">Carne</option>
-        <option value="🧀 Lactate & Ouă">Lactate</option>
-        <option value="🍝 Băcănie">Băcănie</option>
+        <option value="🧀 Lactate">Lactate</option>
+        <option value="🍝 Băcănie & Sosuri">Băcănie</option>
+        <option value="❄️ Congelate & Deserturi">Congelate</option>
         <option value="🍫 Dulciuri & Cafea">Dulciuri</option>
         <option value="🧃 Băuturi">Băuturi</option>
       </select>
@@ -271,50 +273,36 @@
   <script>
     const INITIAL_ITEMS = [
       // Fructe & Legume
-      { id: 1, text: "Ceapă roșie (1 buc.)", cat: "🥬 Fructe & Legume", done: false },
-      { id: 2, text: "Usturoi (1 căpățână)", cat: "🥬 Fructe & Legume", done: false },
-      { id: 3, text: "Spanac proaspăt / baby (150 g)", cat: "🥬 Fructe & Legume", done: false },
-      { id: 4, text: "Lămâi", cat: "🥬 Fructe & Legume", done: false },
-      { id: 5, text: "Avocado", cat: "🥬 Fructe & Legume", done: false },
-      { id: 6, text: "Kiwi gold (3–4 bucăți)", cat: "🥬 Fructe & Legume", done: false },
-      { id: 7, text: "Zmeură caserolă (250 g)", cat: "🥬 Fructe & Legume", done: false },
-      { id: 8, text: "Afine caserolă (250 g)", cat: "🥬 Fructe & Legume", done: false },
+      { id: 1, text: "Lămâi", cat: "🥬 Fructe & Legume", done: false },
+      { id: 2, text: "Avocado", cat: "🥬 Fructe & Legume", done: false },
+      { id: 3, text: "Afine caserolă 250g", cat: "🥬 Fructe & Legume", done: false },
+      { id: 4, text: "Roșii cherry", cat: "🥬 Fructe & Legume", done: false },
+      { id: 5, text: "Baby spanac", cat: "🥬 Fructe & Legume", done: false },
 
-      // Carne & Ready-to-Eat
-      { id: 9, text: "Piept de pui (700 g)", cat: "🥩 Carne & Fresh", done: false },
-      { id: 10, text: "Carne tocată vită slabă (350 g)", cat: "🥩 Carne & Fresh", done: false },
-      { id: 11, text: "Șuncă de pui cu față zâmbitoare", cat: "🥩 Carne & Fresh", done: false },
-      { id: 12, text: "Platou sushi", cat: "🥩 Carne & Fresh", done: false },
+      // Pâine & Panificație
+      { id: 6, text: "Pâinea campionilor (de feliat în aparat)", cat: "🥖 Pâine & Panificație", done: false },
+      { id: 7, text: "Chifle mici / bagel pt sandviș mic dejun (4 bucăți)", cat: "🥖 Pâine & Panificație", done: false },
+      { id: 8, text: "Brioșele Piu Grande (unde sunt pâinicile uscate)", cat: "🥖 Pâine & Panificație", done: false },
 
-      // Lactate & Ouă
-      { id: 13, text: "Mozzarella (200 g)", cat: "🧀 Lactate & Ouă", done: false },
-      { id: 14, text: "Cremă de brânză / Cream cheese (200 g)", cat: "🧀 Lactate & Ouă", done: false },
-      { id: 15, text: "Brânză cheddar Milbona", cat: "🧀 Lactate & Ouă", done: false },
-      { id: 16, text: "Iaurt grecesc (80 g)", cat: "🧀 Lactate & Ouă", done: false },
-      { id: 17, text: "Lapte fără lactoză (1 L)", cat: "🧀 Lactate & Ouă", done: false },
-      { id: 18, text: "Carton 6 ouă medii", cat: "🧀 Lactate & Ouă", done: false },
+      // Carne & Fresh
+      { id: 9, text: "Piept de pui Food Glory", cat: "🥩 Carne & Fresh", done: false },
 
-      // Băcănie & Condimente
-      { id: 19, text: "Paste (450 g)", cat: "🍝 Băcănie", done: false },
-      { id: 20, text: "Sos de paste (500 g)", cat: "🍝 Băcănie", done: false },
-      { id: 21, text: "Lipii / Wraps (1 pachet)", cat: "🍝 Băcănie", done: false },
-      { id: 22, text: "Condiment Cajun (cajun powder)", cat: "🍝 Băcănie", done: false },
-      { id: 23, text: "Ulei de măsline", cat: "🍝 Băcănie", done: false },
+      // Lactate
+      { id: 10, text: "Cașcaval cheddar de la Delaco", cat: "🧀 Lactate", done: false },
+      { id: 11, text: "Iaurt mic dejun cu cereale și fibre (iaurt alb la bază) - 2 buc.", cat: "🧀 Lactate", done: false },
+      { id: 12, text: "Smântână de gătit fără lactoză (raftul cu lapte vegetal)", cat: "🧀 Lactate", done: false },
 
-      // Dulciuri & Cafea
-      { id: 24, text: "Cafea la plic de ibric (pt Miha)", cat: "🍫 Dulciuri & Cafea", done: false },
-      { id: 25, text: "Bomboane Halloween (pt Luana)", cat: "🍫 Dulciuri & Cafea", done: false },
-      { id: 26, text: "O cutie bomboane Merci", cat: "🍫 Dulciuri & Cafea", done: false },
+      // Băcănie & Sosuri
+      { id: 13, text: "Pesto Barilla GENOVESE", cat: "🍝 Băcănie & Sosuri", done: false },
 
-      // Băuturi
-      { id: 27, text: "Suc de fructe (portocale)", cat: "🧃 Băuturi", done: false },
-      { id: 28, text: "4 sucuri mici cu pai", cat: "🧃 Băuturi", done: false }
+      // Congelate & Deserturi
+      { id: 14, text: "Toblerone lava cake (congelate, deserturi)", cat: "❄️ Congelate & Deserturi", done: false }
     ];
 
-    let items = JSON.parse(localStorage.getItem('shopping_items_v2')) || INITIAL_ITEMS;
+    let items = JSON.parse(localStorage.getItem('shopping_items_v3')) || INITIAL_ITEMS;
 
     function save() {
-      localStorage.setItem('shopping_items_v2', JSON.stringify(items));
+      localStorage.setItem('shopping_items_v3', JSON.stringify(items));
       render();
     }
 
