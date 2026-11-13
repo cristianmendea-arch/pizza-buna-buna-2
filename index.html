@@ -273,36 +273,25 @@
   <script>
     const INITIAL_ITEMS = [
       // Fructe & Legume
-      { id: 1, text: "Lămâi", cat: "🥬 Fructe & Legume", done: false },
-      { id: 2, text: "Avocado", cat: "🥬 Fructe & Legume", done: false },
-      { id: 3, text: "Afine caserolă 250g", cat: "🥬 Fructe & Legume", done: false },
-      { id: 4, text: "Roșii cherry", cat: "🥬 Fructe & Legume", done: false },
-      { id: 5, text: "Baby spanac", cat: "🥬 Fructe & Legume", done: false },
-
-      // Pâine & Panificație
-      { id: 6, text: "Pâinea campionilor (de feliat în aparat)", cat: "🥖 Pâine & Panificație", done: false },
-      { id: 7, text: "Chifle mici / bagel pt sandviș mic dejun (4 bucăți)", cat: "🥖 Pâine & Panificație", done: false },
-      { id: 8, text: "Brioșele Piu Grande (unde sunt pâinicile uscate)", cat: "🥖 Pâine & Panificație", done: false },
+      { id: 1, text: "Banane", cat: "🥬 Fructe & Legume", done: false },
+      { id: 2, text: "Cartofi dulci - 5", cat: "🥬 Fructe & Legume", done: false },
 
       // Carne & Fresh
-      { id: 9, text: "Piept de pui Food Glory", cat: "🥩 Carne & Fresh", done: false },
+      { id: 3, text: "Carne de vita tocata (sa fie macar 700g)", cat: "🥩 Carne & Fresh", done: false },
+      { id: 4, text: "Sunca pentru dimineata", cat: "🥩 Carne & Fresh", done: false },
+      { id: 5, text: "Aripioare la caserola", cat: "🥩 Carne & Fresh", done: false },
 
       // Lactate
-      { id: 10, text: "Cașcaval cheddar de la Delaco", cat: "🧀 Lactate", done: false },
-      { id: 11, text: "Iaurt mic dejun cu cereale și fibre (iaurt alb la bază) - 2 buc.", cat: "🧀 Lactate", done: false },
-      { id: 12, text: "Smântână de gătit fără lactoză (raftul cu lapte vegetal)", cat: "🧀 Lactate", done: false },
+      { id: 6, text: "Oua", cat: "🧀 Lactate", done: true },
 
       // Băcănie & Sosuri
-      { id: 13, text: "Pesto Barilla GENOVESE", cat: "🍝 Băcănie & Sosuri", done: false },
-
-      // Congelate & Deserturi
-      { id: 14, text: "Toblerone lava cake (congelate, deserturi)", cat: "❄️ Congelate & Deserturi", done: false }
+      { id: 7, text: "Punga magica pentru carne", cat: "🍝 Băcănie & Sosuri", done: false }
     ];
 
-    let items = JSON.parse(localStorage.getItem('shopping_items_v3')) || INITIAL_ITEMS;
+    let items = JSON.parse(localStorage.getItem('shopping_items_v4')) || INITIAL_ITEMS;
 
     function save() {
-      localStorage.setItem('shopping_items_v3', JSON.stringify(items));
+      localStorage.setItem('shopping_items_v4', JSON.stringify(items));
       render();
     }
 
